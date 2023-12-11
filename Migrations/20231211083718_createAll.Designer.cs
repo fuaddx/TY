@@ -12,8 +12,8 @@ using Pustok2.Contexts;
 namespace Pustok2.Migrations
 {
     [DbContext(typeof(PustokDbContext))]
-    [Migration("20231211001209_Blog_Tag_Relation")]
-    partial class Blog_Tag_Relation
+    [Migration("20231211083718_createAll")]
+    partial class createAll
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,21 +23,6 @@ namespace Pustok2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("BlogTag", b =>
-                {
-                    b.Property<int>("BlogsId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("BlogsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("BlogTag");
-                });
 
             modelBuilder.Entity("Pustok2.Models.Author", b =>
                 {
@@ -99,6 +84,29 @@ namespace Pustok2.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("Pustok2.Models.BlogTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BlogId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("BlogsTags");
                 });
 
             modelBuilder.Entity("Pustok2.Models.Category", b =>
@@ -286,21 +294,6 @@ namespace Pustok2.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("BlogTag", b =>
-                {
-                    b.HasOne("Pustok2.Models.Blog", null)
-                        .WithMany()
-                        .HasForeignKey("BlogsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Pustok2.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Pustok2.Models.Blog", b =>
                 {
                     b.HasOne("Pustok2.Models.Author", "Author")
@@ -310,6 +303,25 @@ namespace Pustok2.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("Pustok2.Models.BlogTag", b =>
+                {
+                    b.HasOne("Pustok2.Models.Blog", "Blog")
+                        .WithMany("TagBlog")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pustok2.Models.Tag", "Tag")
+                        .WithMany("TagBlog")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Blog");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Pustok2.Models.Product", b =>
@@ -358,6 +370,11 @@ namespace Pustok2.Migrations
                     b.Navigation("Blogs");
                 });
 
+            modelBuilder.Entity("Pustok2.Models.Blog", b =>
+                {
+                    b.Navigation("TagBlog");
+                });
+
             modelBuilder.Entity("Pustok2.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -371,6 +388,11 @@ namespace Pustok2.Migrations
             modelBuilder.Entity("Pustok2.Models.Product", b =>
                 {
                     b.Navigation("ProductColors");
+                });
+
+            modelBuilder.Entity("Pustok2.Models.Tag", b =>
+                {
+                    b.Navigation("TagBlog");
                 });
 #pragma warning restore 612, 618
         }

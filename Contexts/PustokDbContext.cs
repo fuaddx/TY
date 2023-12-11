@@ -15,6 +15,7 @@ namespace Pustok2.Contexts
         public DbSet<Color> Color { get; set; }
         public DbSet<ProductColor> ProductColors { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<BlogTag> BlogsTags { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

@@ -17,6 +17,7 @@ namespace Pustok2.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            //await _db.Blogs.Include(o => o.Tags).ToListAsync();
             IEnumerable<BlogListVM> blogs = await _db.Blogs.Select(c => new BlogListVM
             {
                 Id = c.Id,
@@ -25,8 +26,6 @@ namespace Pustok2.Areas.Admin.Controllers
                 CreatedAt = c.CreatedAt,
                 Author = c.Author,
                 UptadedAt = c.UptadedAt,
-                Tags = c.Tags.ToList()
-
             }).ToListAsync();
 
             return View(blogs);
@@ -57,7 +56,7 @@ namespace Pustok2.Areas.Admin.Controllers
                 Title = vm.Title,
                 Description = vm.Description,
                 AuthorId = vm.AuthorId,
-                Tags = vm.Tags.ToList()
+               
             };
 
             await _db.Blogs.AddAsync(new_blog);

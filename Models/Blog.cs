@@ -7,7 +7,7 @@ namespace Pustok2.Models
     {
         public int Id { get; set; }
 
-        [MaxLength(64)] 
+        [MaxLength(64)]
         public string Title { get; set; }
         public string Description { get; set; }
 
@@ -21,6 +21,7 @@ namespace Pustok2.Models
 
         public bool IsDeleted { get; set; } = false;
 
-        public IEnumerable<Tag> Tags { get; set; }
+
+        public IEnumerable<BlogTag>? TagBlog { get; set; }
     }
 }
