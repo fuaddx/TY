@@ -1,6 +1,17 @@
-﻿@model IEnumerable<CategoryListItemVM>
+﻿@model PaginatonVM<IEnumerable<CategoryListItemVM>>
 @{
     ViewData["Title"] = "Index";
+}
+@* http://localhost:5042/Admin/Category/ProductPagination?page=1&count=6 *@
+@section scripts {
+    <script>
+        $("#prod-pag a").click(function (ev) {
+            ev.preventDefault();
+            var url = $(this).attr("href")
+            var html = "";
+            fetch(url);
+        })
+    </script>
 }
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -15,10 +26,10 @@
                     <th>Name</th>
                     <th colspan="2">Action</th>
                 </thead>
-                <tbody>
+                @* <tbody>
                     @if (Model != null)
                     {
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Categories)
                         {
                             <tr>
                                 <td>@item.Id</td>
@@ -34,8 +45,20 @@
                             <td class="text-center" colspan="4">No data</td>
                         </tr>
                     }
-                </tbody>
+                </tbody> *@
             </table>
         </div>
+            @* <nav aria-label="Page navigation example">
+                <ul id="prod-pag" class="pagination">
+                    <li class="page-item @(Model.PaginatedProducts.HasPrev ? " " : "disabled")"><a class="page-link" asp-action="ProductPagination" asp-route-page ="@(Model.PaginatedProducts.CurrentPage-1)">Previous</a></li>
+                    @for(int i =1; i <= Model.PaginatedProducts.LastPage; i++)
+                    {
+                        <li class="page-item @(i==Model.PaginatedProducts.CurrentPage ? "active": "")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@i">@i</a></li>
+                    }
+                    
+                    <li class="page-item @(Model.PaginatedProducts.HasNext ? " " : "disabled")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@(Model.PaginatedProducts.CurrentPage-1)">Next</a></li>
+          </ul>
+        
+</nav> *@
     </div>
 </div>

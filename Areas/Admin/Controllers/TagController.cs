@@ -19,32 +19,29 @@ namespace Pustok2.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Tag> tags = await _pustokDbContext.Tags.ToListAsync();
-
-            IEnumerable<ListTagVm> tags_vm = tags.Select(tag => new ListTagVm() { Id = tag.Id, Title = tag.Title });
-
-            return View(tags_vm);
+            return View(await _pustokDbContext.Tags.Select(c=> new ListTagVm
+            {
+                Id = c.Id,
+                Title = c.Title,
+            }).ToListAsync());
         }
-
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTagVm createTagVm)
+        public async Task<IActionResult> Create(CreateTagVm vm)
         {
-            Tag tag = new Tag()
+            if (!ModelState.IsValid)
             {
-                Id = Guid.NewGuid(),
-                Title = createTagVm.Title
-            };
-
-            EntityEntry<Tag> entityEntry = await _pustokDbContext.Tags.AddAsync(tag);
-
-            int result = await _pustokDbContext.SaveChangesAsync();
-
-            return Redirect(nameof(Index));
+                return View(vm);
+            }
+            await _pustokDbContext.Tags.AddAsync(new Models.Tag
+            {
+                Title = vm.Title,
+            });
+            await _pustokDbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Update()

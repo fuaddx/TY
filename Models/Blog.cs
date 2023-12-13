@@ -21,7 +21,7 @@ namespace Pustok2.Models
 
         public bool IsDeleted { get; set; } = false;
 
+        public IEnumerable<BlogTag>? BlogTag { get; set; }
 
-        public IEnumerable<BlogTag>? TagBlog { get; set; }
     }
 }

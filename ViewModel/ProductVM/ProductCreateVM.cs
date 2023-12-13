@@ -5,7 +5,8 @@ namespace Pustok2.ViewModel.ProductVM;
 
 public class ProductCreateVM
 {
-    public string Name { get; set; }
+	[MaxLength(64)]
+	public string Name { get; set; }
     [MaxLength(128)]
     public string? About { get; set; }
     public string? Description { get; set; }
@@ -19,5 +20,7 @@ public class ProductCreateVM
     public int ProductCode { get; set; }
     public int CategoryId { get; set; }
     public IEnumerable<int> ColorIds{ get; set; }
-
+	public IFormFile MainImage { get; set; }
+    public IFormFile HoverImage { get; set; }
+    public IEnumerable<IFormFile>? Images { get; set; }
 }

@@ -10,5 +10,7 @@ namespace Pustok2.ViewModel.ProductImagesVm
 
         public IFormFile ImageFile { get; set; }
         public bool IsActive { get; set; }
+
+
     }
 }

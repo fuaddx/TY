@@ -13,9 +13,12 @@ namespace Pustok2.Areas.Admin.Controllers
     public class ProductImagesController : Controller
     {
         PustokDbContext _db { get; }
-        public ProductImagesController(PustokDbContext db)
+        IWebHostEnvironment _env { get; }
+
+        public ProductImagesController(PustokDbContext db, IWebHostEnvironment env)
         {
             _db = db;
+            _env = env;
         }
         public async Task<IActionResult> Index()
         {
@@ -35,7 +38,7 @@ namespace Pustok2.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductImagesVm vm)
         {
-            if (vm.ImageFile != null)
+            /*if (vm.ImageFile != null)
             {
                 if (!vm.ImageFile.IsCorrectType())
                 {
@@ -45,7 +48,7 @@ namespace Pustok2.Areas.Admin.Controllers
                 {
                     ModelState.AddModelError("ImageFile", "Files length must be less than kb");
                 }
-            }
+            }*/
             ProductImages productImages = new ProductImages
             {
                 ImagePath = vm.ImagePath,

@@ -23,12 +23,25 @@ namespace Pustok2.Contexts
 
             foreach (EntityEntry<Blog> entry in entries)
             {
-                _ = entry.State switch
+                if (entry.State == EntityState.Added)
                 {
-                    EntityState.Added => entry.Entity.CreatedAt = DateTime.UtcNow,
-                    EntityState.Modified => entry.Entity.UptadedAt = DateTime.UtcNow,
-                    _ => DateTime.UtcNow,
-                };
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.UptadedAt = null; // Set to null for newly added entities
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.UptadedAt = DateTime.UtcNow;
+
+                    // Check if any properties were modified
+                    var modifiedProperties = entry.Properties
+                        .Where(property => property.IsModified && !property.Metadata.IsPrimaryKey());
+
+                    if (!modifiedProperties.Any())
+                    {
+                        entry.Entity.UptadedAt = null;
+                        /*entry.Property("UptadedAt").CurrentValue = "No Updated";*/
+                    }
+                }
             }
 
             return base.SaveChangesAsync(cancellationToken);

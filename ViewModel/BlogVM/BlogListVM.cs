@@ -12,7 +12,6 @@ namespace Pustok2.ViewModel.BlogVM
         public DateTime? UptadedAt { get; set; }
         public Author? Author { get; set; }
         public IEnumerable<Tag>? Tags { get; set; }
-
         public int AuthorId { get; set; }
     }
 }

@@ -13,5 +13,6 @@ namespace Pustok2.ViewModel.BlogVM
         public int AuthorId { get; set; }
         [Required]
         public List<Tag>? Tags { get; set; }
+        public IEnumerable<int>? TagsId { get; set; }
     }
 }

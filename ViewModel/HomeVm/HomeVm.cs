@@ -1,5 +1,7 @@
-﻿using Pustok2.ViewModel.ProductVM;
+﻿using Pustok2.ViewModel.CategoryVM;
+using Pustok2.ViewModel.ProductVM;
 using Pustok2.ViewModel.SliderVM;
+using Pustok2.ViewModel.CommonVM;
 
 namespace Pustok2.ViewModel.HomeVm
 {
@@ -7,5 +9,7 @@ namespace Pustok2.ViewModel.HomeVm
     {
         public IEnumerable<SliderListItemVM> Sliders { get; set; }
         public IEnumerable<ProductListVM> Products { get; set; }
+        public PaginatonVM<IEnumerable<CategoryListItemVM>> PaginatedCategories { get; set; }
+        public IEnumerable<CategoryListItemVM> Categories { get; set; }
     }
 }

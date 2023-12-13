@@ -19,9 +19,11 @@ public class Product
     public float Discount { get; set; }
     public ushort Quantity { get; set; }
     public string? ImageUrl { get; set; }
+    public string? ImageUrl2 { get; set; }
     public int CategoryId { get; set; }
     public int ProductCode { get; set; }
     public Category? Category { get; set; }
     public bool IsDeleted { get; set; } = false;
     public ICollection<ProductColor>? ProductColors { get; set; }
+	public ICollection<ProductImages> ProductImages { get; set; }
 }

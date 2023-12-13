@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Pustok2.Contexts;
+using Pustok2.Helpers;
 
 internal class Program
 {
@@ -36,6 +37,10 @@ internal class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+        PathConstants.RootPath = builder.Environment.WebRootPath;
+
         app.Run();
     }
 }
