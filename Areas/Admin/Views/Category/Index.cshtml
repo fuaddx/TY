@@ -2,14 +2,14 @@
 @{
     ViewData["Title"] = "Index";
 }
-@* http://localhost:5042/Admin/Category/ProductPagination?page=1&count=6 *@
+
 @section scripts {
     <script>
-        $("#prod-pag a").click(function (ev) {
+        $("#dataTable").on("click","#prod-pag a",function(ev){
             ev.preventDefault();
-            var url = $(this).attr("href")
-            var html = "";
-            fetch(url);
+            fetch($(this).attr("href"))
+            .then(res=>res.text())
+            .then(data=>$("#dataTable").html(data))
         })
     </script>
 }
@@ -18,47 +18,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Category</h6>
         <a asp-action="Create" class="btn btn-outline-success">Create</a>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th colspan="2">Action</th>
-                </thead>
-                @* <tbody>
-                    @if (Model != null)
-                    {
-                        @foreach (var item in Model.Categories)
-                        {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.Name</td>
-                                <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
-                                <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td class="text-center" colspan="4">No data</td>
-                        </tr>
-                    }
-                </tbody> *@
-            </table>
-        </div>
-            @* <nav aria-label="Page navigation example">
-                <ul id="prod-pag" class="pagination">
-                    <li class="page-item @(Model.PaginatedProducts.HasPrev ? " " : "disabled")"><a class="page-link" asp-action="ProductPagination" asp-route-page ="@(Model.PaginatedProducts.CurrentPage-1)">Previous</a></li>
-                    @for(int i =1; i <= Model.PaginatedProducts.LastPage; i++)
-                    {
-                        <li class="page-item @(i==Model.PaginatedProducts.CurrentPage ? "active": "")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@i">@i</a></li>
-                    }
-                    
-                    <li class="page-item @(Model.PaginatedProducts.HasNext ? " " : "disabled")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@(Model.PaginatedProducts.CurrentPage-1)">Next</a></li>
-          </ul>
-        
-</nav> *@
+    <div class="card-body" id="dataTable">
+       <partial model="Model" name="_ProductPaginationPartial" />
     </div>
 </div>

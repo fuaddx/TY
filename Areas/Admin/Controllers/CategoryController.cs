@@ -16,7 +16,7 @@ namespace Pustok2.Areas.Admin.Controllers
         {
             _db = db;
         }
-
+        
         public async Task<IActionResult> Index()
         {
             int take = 4;
@@ -27,7 +27,7 @@ namespace Pustok2.Areas.Admin.Controllers
             });
             int count = await _db.Categories.CountAsync();
             PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1, (int)Math.Ceiling((decimal)count / take), items);
-            return View(await _db.Categories.Select(c => new CategoryListItemVM { Id = c.Id, Name = c.Name }).ToListAsync());
+            return View(pag);
         }
         public IActionResult Create()
         {
@@ -53,8 +53,17 @@ namespace Pustok2.Areas.Admin.Controllers
         }
         public async Task<IActionResult> ProductPagination(int page = 1, int count = 8)
         {
-            var datas = await _db.Products.Where(p => !p.IsDeleted).Take(count).ToListAsync();
-            return PartialView("_ProductPaginationPartial",datas);
+
+            var items = _db.Categories.Skip((page-1)*page).Take(count).Select(p => new CategoryListItemVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+            });
+            int tcount = await _db.Categories.CountAsync();
+            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1, (int)Math.Ceiling((decimal)tcount / count), items);
+   
+
+            return PartialView("_ProductPaginationPartial", pag);
         }
     }
 }

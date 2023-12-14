@@ -17,6 +17,7 @@ internal class Program
         });
         // ne vaxt Pustok istesem konstruktorda New la ver mene 
 
+        builder.Services.AddScoped<LayoutService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
