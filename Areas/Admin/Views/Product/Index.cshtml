@@ -39,22 +39,19 @@
                                 <td>@item.Discount</td>
                                 <td>@item.Quantity</td>
                                 <td>@item.ProductCode</td>
-                                @if (item != null)
-                                {
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                        {
-                                            <img width="80" src="~/@item.ImageUrl" />
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.ImageUrl2))
-                                        {
-                                            <img width="80" src="~/@item.ImageUrl2" />
-                                        }
-                                    </td>
-                                }
-                                
+                                    @if (item != null)
+                                    {
+                                        <td>
+                                             @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                            {
+                                                <img width="80" src="~/@item.ImageUrl" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <img width="80" src="/@item.UrlImage2" />
+                                        </td>
+                                     }
+                                   
                                 <td>@item.Category?.Name</td>
                                 @if (item.Colors == null || item.Colors.Count() == 0)
                                 {

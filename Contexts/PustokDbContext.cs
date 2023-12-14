@@ -1,4 +1,4 @@
-﻿using Pustok2.Models;
+﻿    using Pustok2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pustok2.Models;
@@ -54,7 +54,7 @@ namespace Pustok2.Contexts
             modelBuilder.Entity<Setting>()
                 .HasData(new Setting
                 {
-                    Logo = "http://localhost:5042/assets/image/logo--footer.png",
+                    Logo = "https://cdn.logo.com/hotlink-ok/logo-social.png",
                     Address = "Azerbaijan Baku, HH2 BacHa, New York, USA",
                     Number = "+1994 5077234 5678",
                     Email = "Fuad@hastech.com",

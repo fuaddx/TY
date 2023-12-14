@@ -26,7 +26,7 @@ namespace Pustok2.Areas.Admin.Controllers
                 Name = p.Name,
             });
             int count = await _db.Categories.CountAsync();
-            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1, (int)Math.Ceiling((decimal)count / take), items);
+            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1,  (int)Math.Ceiling((decimal)count / take), items);
             return View(pag);
         }
         public IActionResult Create()
@@ -54,14 +54,13 @@ namespace Pustok2.Areas.Admin.Controllers
         public async Task<IActionResult> ProductPagination(int page = 1, int count = 8)
         {
 
-            var items = _db.Categories.Skip((page-1)*page).Take(count).Select(p => new CategoryListItemVM
+            var items = _db.Categories.Skip((page-1)*count).Take(count).Select(p => new CategoryListItemVM
             {
                 Id = p.Id,
                 Name = p.Name,
             });
-            int tcount = await _db.Categories.CountAsync();
-            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1, (int)Math.Ceiling((decimal)tcount / count), items);
-   
+            int Totalcount = await _db.Categories.CountAsync();
+            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, page, (int)Math.Ceiling((decimal)Totalcount / count), items);
 
             return PartialView("_ProductPaginationPartial", pag);
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Pustok2.Migrations
 {
     /// <inheritdoc />
-    public partial class Tables : Migration
+    public partial class All : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,22 @@ namespace Pustok2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Color", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Settings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Logo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Settings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,7 +136,7 @@ namespace Pustok2.Migrations
                     Discount = table.Column<float>(type: "real", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlImage2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ProductCode = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -209,6 +225,11 @@ namespace Pustok2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Settings",
+                columns: new[] { "Id", "Address", "Email", "Logo", "Number" },
+                values: new object[] { 1, "Azerbaijan Baku, HH2 BacHa, New York, USA", "Fuad@hastech.com", "https://cdn.logo.com/hotlink-ok/logo-social.png", "+1994 5077234 5678" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Blogs_AuthorId",
                 table: "Blogs",
@@ -256,6 +277,9 @@ namespace Pustok2.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductImages");
+
+            migrationBuilder.DropTable(
+                name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "Sliders");

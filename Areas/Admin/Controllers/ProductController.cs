@@ -115,9 +115,9 @@ namespace Pustok2.ViewModel.ProductVM
                 Description = vm.Description,
                 Discount = vm.Discount,
                 ImageUrl = await vm.MainImage.SaveAsync(PathConstants.Product),
-                ImageUrl2 = await vm.HoverImage.SaveAsync(PathConstants.Product),
                 CostPrice = vm.CostPrice,
                 SellPrice = vm.SellPrice,
+                UrlImage2= await vm.HoverImage.SaveAsync(PathConstants.Product),
                 CategoryId = vm.CategoryId,
                 ProductColors = vm.ColorIds.Select(id => new ProductColor
                 {

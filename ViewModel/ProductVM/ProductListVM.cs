@@ -22,8 +22,8 @@ namespace Pustok2.ViewModel.ProductVM
         public int ProductCode { get; set; }
         public Category? Category { get; set; }
         public int CategoryId { get; set; }
-        public string ImageUrl { get; set; }
-        public string ImageUrl2 { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? UrlImage2 { get; set; }
         public bool IsDeleted { get; set; } = false;
 		public IEnumerable<string> ImageUrls { get; set; }
 		public IEnumerable<Color> Colors { get; set; }
