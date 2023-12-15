@@ -15,6 +15,7 @@ internal class Program
             option.UseSqlServer(builder.Configuration.GetConnectionString("MSSql"));
             //or option.UseSqlServer(builder.Configuration[GetConnectionString:"MSSql"]);
         });
+        builder.Services.AddSession();
         // ne vaxt Pustok istesem konstruktorda New la ver mene 
 
         builder.Services.AddScoped<LayoutService>();
@@ -25,6 +26,11 @@ internal class Program
         {
             app.UseExceptionHandler("/Home/Error");
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseSession();
+
         app.UseStaticFiles();
 
         app.UseRouting();

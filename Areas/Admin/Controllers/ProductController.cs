@@ -31,6 +31,7 @@ namespace Pustok2.ViewModel.ProductVM
                 Discount = p.Discount,
                 Category = p.Category,
                 ImageUrl = p.ImageUrl,
+                UrlImage2 = p.UrlImage2,
                 IsDeleted = p.IsDeleted,
                 Quantity = p.Quantity,
                 SellPrice = p.SellPrice,
@@ -132,5 +133,7 @@ namespace Pustok2.ViewModel.ProductVM
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+      
     }
 }
