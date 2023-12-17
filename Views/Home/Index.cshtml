@@ -1,9 +1,42 @@
 ﻿@using Pustok2.Models
-@*@model Pustok2.ModelClass.ProductSliderVM *@
-@*Birinci versiya HomeVm olmayan*@
 @model HomeVm
 @{
     ViewData["Title"] = "Index";
+}
+@section styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $("body").on("click", ".single-btn", function (ev) {
+            ev.preventDefault();
+            fetch($(this).attr("href"))
+                .then(res => {
+                    if (res.ok) {
+
+                        Command: toastr["success"]("Product added")
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "500",
+                            "timeOut": "1000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                    }
+                })
+        });
+    </script>
 }
 
 <!DOCTYPE html>
@@ -27,7 +60,7 @@
         <!--=================================
         Hero Area
         ===================================== -->
-            @await Component.InvokeAsync("Slider");
+            @await Component.InvokeAsync("Slider")
         <!--=================================
         Home Features Section
         ===================================== -->
@@ -167,7 +200,7 @@
                                                         <img src="~/assets/image/products/product-1.jpg" alt="">
                                                     </a>
                                                     <div class="hover-btns">
-                                                        <a href="cart.html" class="single-btn">
+                                                        <a href="cart.html" class="single-btn single1-btn">
                                                             <i class="fas fa-shopping-basket"></i>
                                                         </a>
                                                         <a href="wishlist.html" class="single-btn">
@@ -2122,6 +2155,7 @@
         ===================================== -->
         <section class="section-margin bg-image section-padding-top section-padding"
                  data-bg="~/assets/image/bg-images/best-seller-bg.jpg">
+                 
             <div class="container">
                 <div class="section-title section-title--bordered mb-0">
                     <h2>Best BEST SELLER BOOKS</h2>
@@ -2531,24 +2565,24 @@
 
                             <div class="product-card">
                                 <div class="product-header">
-                                    <a href="#" class="author">
+                                    <a class="author" asp-action="Details" asp-controller="Product" asp-route-id="@product.Id">
                                         @product.Name
                                     </a>
                                     <h3>
-                                        <a href="product-details.html">
+                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id">
                                             @product.About
                                         </a>
                                     </h3>
                                 </div>
-                                <div class="product-card--body">
-                                    <div class="card-image">
-                                        <img src="~/@product.ImageUrl" alt="">
-                                        <div class="hover-contents">
-                                            <a href="product-details.html" class="hover-image">
-                                                <img src="~/@product.ImageUrl" alt="">
+                                <div style="width:230px;padding:15px;" class="product-card--body">
+                                    <div style="height:220px;position:relative" class="card-image">
+                                        <img style="width:85%; height:100%; position:absolute;top:3%;right:5%;object-fit:cover;" src="~/@product.ImageUrl" alt="">
+                                        <div style="position:relative" class="hover-contents">
+                                            <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="hover-image">
+                                                <img style="width:85%; height:100%; position:absolute;top:3%;right:5%;" src="~/@product.UrlImage2" alt="">
                                             </a>
                                             <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
+                                                <a asp-action="AddBasket" asp-controller="Product" asp-route-id="@product.Id" class="single-btn">
                                                     <i class="fas fa-shopping-basket"></i>
                                                 </a>
                                                 <a href="wishlist.html" class="single-btn">

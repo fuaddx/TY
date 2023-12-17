@@ -36,7 +36,7 @@ namespace Pustok2.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ProductImagesVm vm)
+        public async Task<IActionResult> Create(ProductImagesCreateVm vm)
         {
             /*if (vm.ImageFile != null)
             {

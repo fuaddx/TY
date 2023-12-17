@@ -15,6 +15,11 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Title2"></label>
+                <input asp-for="Title2" class="form-control">
+                <span asp-validation-for="Title2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Text"></label>
                 <input asp-for="Text" class="form-control">
                 <span asp-validation-for="Text" class="text-danger"></span>
@@ -27,8 +32,8 @@
             <div class="form-group">
                 <label for="left">Left</label>
                 <input asp-for="Position" value="-1" type="radio" id="left">
-                <label for="middle">Middle</label>
-                <input asp-for="Position" value="0" type="radio" id="middle">
+                @* <label for="middle">Middle</label>
+                <input asp-for="Position" value="0" type="radio" id="middle"> *@
                 <label for="right">Right</label>
                 <input asp-for="Position" value="1" type="radio" id="right">
                 <br />

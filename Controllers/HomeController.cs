@@ -1,12 +1,11 @@
-﻿using Pustok2.ViewModel.BasketVM;
+﻿/*using Pustok2.ViewModel.BasketVM;*/
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pustok2.Areas.Admin.Controllers;
 using Pustok2.Contexts;
-using Pustok2.ModelClass;
 using Pustok2.Models;
-using Pustok2.ViewModel.BasketVM;
+/*using Pustok2.ViewModel.BasketVM;*/
 using Pustok2.ViewModel.HomeVm;
 using Pustok2.ViewModel.ProductVM;
 using Pustok2.ViewModel.SliderVM;
@@ -52,6 +51,7 @@ namespace Pustok2.Controllers
                     Discount = p.Discount,
                     Name = p.Name,
                     ImageUrl = p.ImageUrl,
+                    UrlImage2 = p.UrlImage2,
                     Quantity = p.Quantity,
                     SellPrice = p.SellPrice,
                     CostPrice = p.CostPrice,
@@ -62,30 +62,54 @@ namespace Pustok2.Controllers
         }
 
 
-        public async Task<IActionResult> AddBasket(int? id)
-        {
-            if (id == null || id <= 0) return BadRequest();
-            if (!await _context.Products.AnyAsync(p => p.Id == id)) return NotFound();
-            var basket = JsonConvert.DeserializeObject<List<BasketProductAndCountVM>>(HttpContext.Request.Cookies["basket"] ?? "[]");
-            var existItem = basket.Find(b => b.Id == id);
-            if (existItem == null)
-            {
-                basket.Add(new BasketProductAndCountVM
+        /*        public async Task<IActionResult> AddBasket(int? id)
                 {
-                    Id = (int)id,
-                    Count = 1
-                });
-            }
-            else
-            {
-                existItem.Count++;
-            }
-            HttpContext.Response.Cookies.Append("basket", JsonConvert.SerializeObject(basket), new CookieOptions
-            {
-                MaxAge = TimeSpan.MaxValue
-            });
-            return Ok();
-        }
+                    if (id == null || id <= 0) return BadRequest();
+                    if (!await _context.Products.AnyAsync(p => p.Id == id)) return NotFound();
+                    var basket = JsonConvert.DeserializeObject<List<BasketProductAndCountVM>>(HttpContext.Request.Cookies["basket"] ?? "[]");
+                    var existItem = basket.Find(b => b.Id == id);
+                    if (existItem == null)
+                    {
+                        basket.Add(new BasketProductAndCountVM
+                        {
+                            Id = (int)id,
+                            Count = 1
+                        });
+                    }
+                    else
+                    {
+                        existItem.Count++;
+                    }
+                    HttpContext.Response.Cookies.Append("basket", JsonConvert.SerializeObject(basket), new CookieOptions
+                    {
+                        MaxAge = TimeSpan.MaxValue
+                    });
+                    return Ok();
+                }
+        */
 
+        /* public string GetSession(string key)
+         {
+             return HttpContext.Session.GetString(key) ?? "";
+         }*/
+        /*public void SetSession(string key,string value) 
+        {
+            HttpContext.Session.SetString(key, value);
+        }*/
+        public string GetCookie(string key)
+        {
+            return HttpContext.Request.Cookies[key] ?? "";
+        }
+        public IActionResult GetBasket()
+        {   
+            return ViewComponent("Basket");
+        }
+        /*public void SetCookie(string key,string value)
+        {
+            HttpContext.Response.Cookies.Append(key, value, new CookieOptions
+            {
+                MaxAge = TimeSpan.FromSeconds(30)
+            }); 
+        }*/
     }
 }

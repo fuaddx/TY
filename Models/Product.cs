@@ -21,7 +21,7 @@ public class Product
     public string? ImageUrl { get; set; }
     public string? UrlImage2 { get; set; }
     public int CategoryId { get; set; }
-    public int ProductCode { get; set; }
+    public string? ProductCode { get; set; }
     public Category? Category { get; set; }
     public bool IsDeleted { get; set; } = false;
     public ICollection<ProductColor>? ProductColors { get; set; }

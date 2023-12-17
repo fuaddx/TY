@@ -1,4 +1,4 @@
-﻿    using Pustok2.Models;
+﻿using Pustok2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pustok2.Models;

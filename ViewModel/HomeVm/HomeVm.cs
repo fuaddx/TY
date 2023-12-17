@@ -11,5 +11,6 @@ namespace Pustok2.ViewModel.HomeVm
         public IEnumerable<ProductListVM> Products { get; set; }
         public PaginatonVM<IEnumerable<CategoryListItemVM>> PaginatedCategories { get; set; }
         public IEnumerable<CategoryListItemVM> Categories { get; set; }
+        public IEnumerable<ProductCreateVM>ProductCreates { get; set; }
     }
 }

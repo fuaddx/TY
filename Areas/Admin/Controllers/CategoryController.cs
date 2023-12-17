@@ -16,7 +16,7 @@ namespace Pustok2.Areas.Admin.Controllers
         {
             _db = db;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             int take = 4;
@@ -26,7 +26,7 @@ namespace Pustok2.Areas.Admin.Controllers
                 Name = p.Name,
             });
             int count = await _db.Categories.CountAsync();
-            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1,  (int)Math.Ceiling((decimal)count / take), items);
+            PaginatonVM<IEnumerable<CategoryListItemVM>> pag = new(count, 1, (int)Math.Ceiling((decimal)count / take), items);
             return View(pag);
         }
         public IActionResult Create()
@@ -36,11 +36,11 @@ namespace Pustok2.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateVM vm)
         {
-            if (!ModelState.IsValid) 
-            { 
+            if (!ModelState.IsValid)
+            {
                 return View(vm);
             }
-            if (await _db.Categories.AnyAsync(x=>x.Name == vm.Name))
+            if (await _db.Categories.AnyAsync(x => x.Name == vm.Name))
             {
                 ModelState.AddModelError("Name", vm.Name + " already exist");
                 return View(vm);
@@ -51,6 +51,44 @@ namespace Pustok2.Areas.Admin.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _db.Categories.FindAsync(id);
+            if (data == null) return NotFound();
+            _db.Categories.Remove(data);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _db.Categories.FindAsync(id);
+            if (data == null) return NotFound();
+            return View(new CategoryUpdateVm
+            {
+                Name = data.Name,
+            });
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult>Update(int? id,CategoryUpdateVm vm)
+        {
+            if(id==null|| id<=0) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+            var data = await _db.Categories.FindAsync(id);
+            if(data==null) return NotFound();
+            data.Name= vm.Name;
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> ProductPagination(int page = 1, int count = 8)
         {
 

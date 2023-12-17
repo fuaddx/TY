@@ -21,6 +21,8 @@ namespace Pustok2.ViewComponents
                 Id = p.Id,
                 ImageUrl = p.ImageUrl,
                 IsLeft = p.IsLeft,
+                Title2 = p.Title2,
+                Title = p.Title,
                 Text = p.Text,
             }).ToListAsync());
         }

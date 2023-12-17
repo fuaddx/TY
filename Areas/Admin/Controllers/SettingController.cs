@@ -29,52 +29,6 @@ namespace Pustok2.Areas.Admin.Controllers
                 Logo = c.Logo,
             }).ToListAsync());
         }
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(SettingCreateVm vm)
-        {
-            if(vm.LogoFile != null)
-            {
-                if (!vm.LogoFile.IsCorrectType())
-                {
-                    ModelState.AddModelError("MainImage", "Wrong fie type");
-                }
-            }
-            if(vm.LogoFile != null)
-            {
-                if (!vm.LogoFile.IsValidSize(200))
-                {
-                    ModelState.AddModelError("LogoFile", "File must be less than given kb ");
-                }
-            }
-            Setting setting = new Setting 
-            {
-                Number = vm.Number,
-                Email = vm.Email,
-                Address = vm.Address,
-                Logo = await vm.LogoFile.SaveAsync(PathConstants.Product),
-            };
-            await _db.Settings.AddAsync(setting);
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            TempData["Response"] = false;
-            if (id == null) return BadRequest();
-
-            var data = await _db.Settings.FindAsync(id);
-            if (data == null) return NotFound();
-            _db.Settings.Remove(data);
-            TempData["Response"] = true;
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
-        }
         public async Task<IActionResult> Update(int? id)
         {
             if (id == null || id <= 0) return BadRequest();

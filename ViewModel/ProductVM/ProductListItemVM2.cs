@@ -12,7 +12,7 @@ namespace Pustok2.ViewModel.ProductVM
         public float SellPrice { get; set; }
         public float Discount { get; set; }
         public ushort Quantity { get; set; }
-        public int ProductCode { get; set; }
+        public string? ProductCode { get; set; }
         public int CategoryId { get; set; }
         public bool IsDeleted { get; set; } = false;
     }

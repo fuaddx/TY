@@ -183,8 +183,8 @@ namespace Pustok2.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<int>("ProductCode")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -310,6 +310,11 @@ namespace Pustok2.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Title2")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");

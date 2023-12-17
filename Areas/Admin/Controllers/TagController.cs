@@ -44,24 +44,40 @@ namespace Pustok2.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Update()
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null) return BadRequest();
+            var data = await _pustokDbContext.Tags.FindAsync(id);
+            if(data == null) return BadRequest();
+            _pustokDbContext.Tags.Remove(data);
+            await _pustokDbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _pustokDbContext.Tags.FindAsync(id);
+            if (data == null) return NotFound();
+            return View(new UpdateTagVm
+            {
+                Title = data.Title,
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateTagVm updateTagVm)
+        public async Task<IActionResult> Update(int? id,UpdateTagVm updateTagVm)
         {
-            Tag tag = new Tag()
+            if(id == null|| id<=0) return BadRequest();
+            if (!ModelState.IsValid)
             {
-                Id = updateTagVm.Id,
-                Title = updateTagVm.Title,
-            };
-
-            EntityEntry<Tag> entityEntry = _pustokDbContext.Tags.Update(tag);
-            int result = await _pustokDbContext.SaveChangesAsync();
-
-            return Redirect(nameof(Index));
+                return View(updateTagVm);
+            }
+            var data = await _pustokDbContext.Tags.FindAsync(id);
+            if(data==null) return NotFound();
+            data.Title = updateTagVm.Title;
+            await _pustokDbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

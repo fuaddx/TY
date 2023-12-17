@@ -47,6 +47,7 @@
                 <thead>
                     <th>Id</th>
                     <th>Title</th>
+                    <th>Title2</th>
                     <th>Text</th>
                     <th>Image</th>
                     <th>Position</th>
@@ -58,8 +59,9 @@
                         <tr>
                             <td>@item.Id</td>
                             <td>@item.Title</td>
+                            <th>@item.Title2</th>
                             <td>@item.Text</td>
-                            <td><img width="200" src="@item.ImageUrl" /></td>
+                            <td style="width:40px"><img style="height:125px" width="200" src="@item.ImageUrl" /></td>
                             <td>@(item.IsLeft == true ? "left" : item.IsLeft == false ? "right" : "middle")</td>
                             <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
                             <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>

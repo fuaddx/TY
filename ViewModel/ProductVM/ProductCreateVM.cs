@@ -17,10 +17,10 @@ public class ProductCreateVM
     [Range(0, 100)]
     public float Discount { get; set; }
     public ushort Quantity { get; set; }
-    public int ProductCode { get; set; }
+    public string? ProductCode { get; set; }
     public int CategoryId { get; set; }
     public IEnumerable<int> ColorIds{ get; set; }
-	public IFormFile MainImage { get; set; }
+	public IFormFile? MainImage { get; set; }
     public IFormFile HoverImage { get; set; }
     public IEnumerable<IFormFile>? Images { get; set; }
 }

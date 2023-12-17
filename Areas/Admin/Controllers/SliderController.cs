@@ -23,6 +23,7 @@ namespace Pustok2.Areas.Admin.Controllers
            var list = await _db.Sliders.Select(s => new SliderListItemVM
             {
                 Title = s.Title,
+                Title2 = s.Title2,
                 Text = s.Text,
                 IsLeft = s.IsLeft,
                 ImageUrl = s.ImageUrl,
@@ -48,6 +49,7 @@ namespace Pustok2.Areas.Admin.Controllers
             Slider slider = new Slider
             {
                 Title = vm.Title,
+                Title2 = vm.Title2,
                 Text = vm.Text,
                 ImageUrl = vm.ImageUrl,
                 IsLeft = vm.Position switch
@@ -91,7 +93,8 @@ namespace Pustok2.Areas.Admin.Controllers
                     false => 1
                 },
                 Text = data.Text,
-                Title = data.Title
+                Title = data.Title,
+                Title2 = data.Title2,
             });
         }
         //Change Somethin In Uptade
@@ -119,6 +122,7 @@ namespace Pustok2.Areas.Admin.Controllers
                 }))
                 {
                     data.Title = vm.Title;
+                     data.Title2 = vm.Title2;
                     data.Text = vm.Text;
                     data.ImageUrl = vm.ImageUrl;
                     data.IsLeft = vm.Position switch

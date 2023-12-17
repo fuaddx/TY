@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok2.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.Packaging;
+using Pustok2.Migrations;
 
 namespace Pustok2.ViewModel.ProductVM
 {
@@ -30,6 +32,9 @@ namespace Pustok2.ViewModel.ProductVM
                 CostPrice = p.CostPrice,
                 Discount = p.Discount,
                 Category = p.Category,
+                ProductCode = p.ProductCode,
+                About = p.About,
+                Description = p.Description,
                 ImageUrl = p.ImageUrl,
                 UrlImage2 = p.UrlImage2,
                 IsDeleted = p.IsDeleted,
@@ -115,6 +120,7 @@ namespace Pustok2.ViewModel.ProductVM
                 Quantity = vm.Quantity,
                 Description = vm.Description,
                 Discount = vm.Discount,
+                ProductCode = vm.ProductCode,
                 ImageUrl = await vm.MainImage.SaveAsync(PathConstants.Product),
                 CostPrice = vm.CostPrice,
                 SellPrice = vm.SellPrice,
@@ -134,6 +140,306 @@ namespace Pustok2.ViewModel.ProductVM
             return RedirectToAction(nameof(Index));
         }
 
-      
+
+        /*public async Task<IActionResult> Update(int? id)
+       {
+           if (id == null) return BadRequest();
+           ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+           ViewBag.Categories = _db.Categories;
+           var data = await _db.Products
+               .Include(p=>p.ProductImages)
+               .Include(p=>p.ProductColors)
+               .SingleOrDefaultAsync(p=>p.Id == id);
+           if(data==null) return NotFound();
+
+           var vm = new ProductUpdateVm
+           {
+               About = data.About,
+               CategoryId = data.CategoryId,
+               Quantity = data.Quantity,
+               SellPrice = data.SellPrice,
+               ProductCode = data.ProductCode,
+               ColorIds = data.ProductColors?.Select(i => i.Id),
+               Description = data.Description,
+               Name = data.Name,
+               Discount = data.Discount,
+               ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
+               {
+                   Id = pi.Id,
+                   Url = pi.ImagePath
+               }),
+               CoverImageUrl = data.ImageUrl,
+           };
+           return View(vm);
+       }
+
+       [HttpPost]
+       public async Task<IActionResult>Update(int? id,ProductUpdateVm vm)
+       {
+           if(id==null || id<=0) return BadRequest();
+
+           if (vm.MainImage != null)
+           {
+               if (!vm.MainImage.IsCorrectType())
+               {
+                   ModelState.AddModelError("MainImage", "Wrong file type");
+               }
+               if (!vm.MainImage.IsValidSize())
+               {
+                   ModelState.AddModelError("MainImage", "Files length must be less than kb");
+               }
+           }
+           if (vm.Images != null)
+           {
+               //string message = string.Empty;
+               foreach (var img in vm.Images)
+               {
+                   if (!img.IsCorrectType())
+                   {
+                       ModelState.AddModelError("", "Wrong file type (" + img.FileName + ")");
+                       //message += "Wrong file type (" + img.FileName + ") \r\n";
+                   }
+                   if (!img.IsValidSize(200))
+                   {
+                       ModelState.AddModelError("", "Files length must be less than kb (" + img.FileName + ")");
+                       //message += "Files length must be less than kb (" + img.FileName + ") \r\n";
+                   }
+               }
+           }
+           if (vm.CostPrice > vm.SellPrice)
+           {
+               ModelState.AddModelError("CostPrice", "Sell price must be bigger than cost price");
+           }
+
+           if (!vm.ColorIds.Any())
+           {
+               ModelState.AddModelError("ColorIds", "You must add at least 1 color");
+           }
+           if (!ModelState.IsValid)
+           {
+               ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+               ViewBag.Categories = _db.Categories;
+               return View(vm);
+           }
+           var data = await _db.Products
+               .Include(p => p.ProductImages)
+               .Include(p => p.ProductColors)
+               .SingleOrDefaultAsync(p => p.Id == id);
+           if (data == null) return NotFound();
+
+           vm.About = data.About;
+           vm.CategoryId = data.CategoryId;
+           vm.Quantity = data.Quantity;
+           vm.SellPrice = data.SellPrice;
+           vm.ProductCode = data.ProductCode;
+           vm.ColorIds = data.ProductColors?.Select(i => i.ColorId);
+           vm.Description = data.Description;
+           vm.Name = data.Name;
+           vm.Discount = data.Discount;
+           vm.ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
+               {
+                   Id = pi.Id,
+                   Url = pi.ImagePath
+               });
+           vm.CoverImageUrl = data.ImageUrl;
+
+           if (vm.MainImage != null)
+           {
+               string filePath = Path.Combine(PathConstants.RootPath, data.ImageUrl);
+               if (System.IO.File.Exists(filePath))
+               {
+                   System.IO.File.Delete(filePath);
+               }
+               data.ImageUrl = await vm.MainImage.SaveAsync(PathConstants.Product);
+           }
+
+           if (vm.Images != null)
+           {
+               var imgs = vm.Images.Select(i => new ProductImages
+               {
+                   ImagePath = i.SaveAsync(PathConstants.Product).Result,
+                   ProductId = data.Id
+               });
+
+               data.ProductImages.AddRange(imgs);
+           }
+           if (!Enumerable.SequenceEqual(data.ProductColors?.Select(p=>p.ColorId),vm.ColorIds))
+           {
+               data.ProductColors = vm.ColorIds.Select(c => new ProductColor { ColorId = c, ProductId = data.Id }).ToList();
+           }
+           await _db.SaveChangesAsync();
+           return RedirectToAction(nameof(Index));
+       }*/
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null || id <= 0) return BadRequest();
+            ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+            ViewBag.Categories = _db.Categories;
+            var data = await _db.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductColors)
+                .SingleOrDefaultAsync(p => p.Id == id);
+            //.Include(p => p.ProductColors)
+            //    .ThenInclude(pc => pc.Color)
+            //.Include(p => p.Category)
+            if (data == null) return NotFound();
+
+
+            var vm = new ProductUpdateVm
+            {
+                About = data.About,
+                CategoryId = data.CategoryId,
+                ColorIds = data.ProductColors?.Select(i => i.ColorId),
+                CostPrice = data.CostPrice,
+                Description = data.Description,
+                Discount = data.Discount,
+                Name = data.Name,
+                ProductCode = data.ProductCode,
+                Quantity = data.Quantity,
+                SellPrice = data.SellPrice,
+                ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
+                {
+                    Id = pi.Id,
+                    Url = pi.ImagePath
+                }),
+                CoverImageUrl = data.ImageUrl
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int? id, ProductUpdateVm vm)
+        {
+            if (id == null || id <= 0) return BadRequest();
+            if (vm. MainImage != null)
+            {
+                if (!vm.MainImage.IsCorrectType())
+                {
+                    ModelState.AddModelError("ImageFile", "Wrong file type");
+                }
+                if (!vm.MainImage.IsValidSize())
+                {
+                    ModelState.AddModelError("ImageFile", "Files length must be less than kb");
+                }
+            }
+            if (vm.Images != null)
+            {
+                //string message = string.Empty;
+                foreach (var img in vm.Images)
+                {
+                    if (!img.IsCorrectType())
+                    {
+                        ModelState.AddModelError("", "Wrong file type (" + img.FileName + ")");
+                        //message += "Wrong file type (" + img.FileName + ") \r\n";
+                    }
+                    if (!img.IsValidSize(200))
+                    {
+                        ModelState.AddModelError("", "Files length must be less than kb (" + img.FileName + ")");
+                        //message += "Files length must be less than kb (" + img.FileName + ") \r\n";
+                    }
+                }
+            }
+            if (vm.CostPrice > vm.SellPrice)
+            {
+                ModelState.AddModelError("CostPrice", "Sell price must be bigger than cost price");
+            }
+
+            if (!vm.ColorIds.Any())
+            {
+                ModelState.AddModelError("ColorIds", "You must add at least 1 color");
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+                ViewBag.Categories = _db.Categories;
+                return View(vm);
+            }
+
+            var data = await _db.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductColors)
+                .SingleOrDefaultAsync(p => p.Id == id);
+
+            if (data == null) return NotFound();
+
+            vm.Name = data.Name;
+            vm.About = data.About;
+            vm.CategoryId = data.CategoryId;
+            vm.Quantity = data.Quantity;
+            vm.SellPrice = data.SellPrice;
+            vm.ProductCode = data.ProductCode;
+            vm.ColorIds = data.ProductColors?.Select(i => i.ColorId);
+            vm.Description = data.Description;
+            vm.Name = data.Name;
+            vm.Discount = data.Discount;
+            vm.ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
+            {
+                Id = pi.Id,
+                Url = pi.ImagePath
+            });
+            vm.CoverImageUrl = data.ImageUrl;
+
+            if (vm.MainImage != null)
+            {
+                string filePath = Path.Combine(PathConstants.RootPath, data.ImageUrl);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                // Kohne sekli yaddasdan silmek
+
+                data.ImageUrl = await vm.MainImage.SaveAsync(PathConstants.Product);
+                //Yeni sekli save elemek
+            }
+            if (vm.Images != null)
+            {
+                var imgs = vm.Images.Select(i => new ProductImages
+                {
+                    ImagePath = i.SaveAsync(PathConstants.Product).Result,
+                    ProductId = data.Id
+                });
+
+                data.ProductImages.AddRange(imgs);
+            }
+
+            if (!Enumerable.SequenceEqual(data.ProductColors?.Select(p => p.ColorId), vm.ColorIds))
+            {
+                data.ProductColors = vm.ColorIds.Select(c => new ProductColor { ColorId = c, ProductId = data.Id }).ToList();
+            }
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteImage(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _db.ProductImages.FindAsync(id);
+            if (data == null) return NotFound();
+            _db.ProductImages.Remove(data);
+            await _db.SaveChangesAsync();
+            return Ok();
+        }
+        public async Task<IActionResult> DeleteImageCSharp(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _db.ProductImages.FindAsync(id);
+            if (data == null) return NotFound();
+            _db.ProductImages.Remove(data);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Update), new { id = data.ProductId });
+        }
+
+        public async Task<IActionResult>DeleteProduct(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _db.Products.FindAsync(id);
+            if (data == null) return NotFound();
+            _db.Products.Remove(data);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+       
     }
 }

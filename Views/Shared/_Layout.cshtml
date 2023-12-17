@@ -3,6 +3,7 @@
 @inject LayoutService service;
 @{
     Setting setting = await service.GetSettingAsync();
+
 }
 
 <!DOCTYPE html>
@@ -14,6 +15,19 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/assets/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Pustok2/assets.styles.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("styles", false)
+</head>
+<!--Products Details -->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Pustok - Book Store HTML Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Use Minified Plugins Version For Fast Page Load -->
+    <link rel="stylesheet" type="text/css" media="screen" href="~/assets/css/plugins.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/assets/css/main.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/image/favicon.ico">
 </head>
 <body>
 
@@ -331,7 +345,7 @@
                                     <div class="cart-block">
                                         <div class="cart-total">
                                             <span class="text-number">
-                                                1
+                                                0
                                             </span>
                                             <span class="text-item">
                                                 Shopping Cart
@@ -346,7 +360,7 @@
                                     </div>
                                 </div>
                             </div>
-                                 @await Component.InvokeAsync("Basket");
+                                 @await Component.InvokeAsync("Basket")
                         </div>
                     </div>
                 </div>
