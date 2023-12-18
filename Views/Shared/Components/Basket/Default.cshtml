@@ -1,7 +1,20 @@
-﻿@* 
+﻿
 @model IEnumerable<BasketProductItemVM>
 
 <div id="basket">
+    <div class="cart-block">
+        <div class="cart-total">
+            <span class="text-number">
+                @Model.Sum(x=>x.Count)
+            </span>
+            <span class="text-item">
+                Shopping Cart
+            </span>
+            <span class="price">
+                £@Model.Sum(p=> p.Count * p.SellPrice)
+                <i class="fas fa-chevron-down"></i>
+            </span>
+        </div>
 <div class="cart-dropdown-block">
     <div class=" single-cart-block ">
         @foreach(var item in Model){
@@ -15,7 +28,7 @@
                         @item.Name
                     </a>
                 </h3>
-                <p class="price"><span class="qty">1 ×</span> £@item.SellPrice</p>
+                     <p class="price"><span class="qty">@item.Count ×</span> £@item.SellPrice</p>
                 <button class="cross-btn"><i class="fas fa-times"></i></button>
             </div>
         </div>
@@ -32,4 +45,4 @@
         </div>
     </div>
 </div>
-<div/> *@
+<div/> 

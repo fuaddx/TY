@@ -25,5 +25,5 @@ public class Product
     public Category? Category { get; set; }
     public bool IsDeleted { get; set; } = false;
     public ICollection<ProductColor>? ProductColors { get; set; }
-	public ICollection<ProductImages> ProductImages { get; set; }
+	public List<ProductImages> ProductImages { get; set; }
 }

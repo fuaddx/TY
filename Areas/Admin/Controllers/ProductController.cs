@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pustok2.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Packaging;
+
 using Pustok2.Migrations;
 
 namespace Pustok2.ViewModel.ProductVM

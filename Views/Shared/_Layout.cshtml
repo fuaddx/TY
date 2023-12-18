@@ -342,25 +342,14 @@
                                         <a href="login-register.html" class="font-weight-bold">Login</a> <br>
                                         <span>or</span><a href="login-register.html">Register</a>
                                     </div>
-                                    <div class="cart-block">
-                                        <div class="cart-total">
-                                            <span class="text-number">
-                                                0
-                                            </span>
-                                            <span class="text-item">
-                                                Shopping Cart
-                                            </span>
-                                            <span class="price">
-                                                £0.00
-                                                <i class="fas fa-chevron-down"></i>
-                                            </span>
-                                        </div>
+                                    
                                         <div id="basket">
+                                             @await Component.InvokeAsync("Basket")
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                                 @await Component.InvokeAsync("Basket")
                         </div>
                     </div>
                 </div>
