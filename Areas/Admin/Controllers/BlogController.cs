@@ -36,10 +36,14 @@ namespace Pustok2.Areas.Admin.Controllers
             ViewBag.Tags = new SelectList(_db.Tags.ToList(), "Id", "Title");
             return View();
         }
+        public IActionResult Cancel()
+        {
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Create(BloglistCreateVm vm)
         {
-            if (await _db.Tags.Where(c => vm.TagsId.Contains(c.Id)).Select(c => c.Id).CountAsync() != vm.TagsId.Count())
+            if (await _db.Tags?.Where(c => vm.TagsId.Contains(c.Id)).Select(c => c.Id).CountAsync() != vm.TagsId?.Count())
             {
                 ModelState.AddModelError("TagsId", "TagsId doesnt exist");
                 ViewBag.Author = _db.Author;
@@ -107,9 +111,6 @@ namespace Pustok2.Areas.Admin.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Cancel()
-        {
-            return RedirectToAction(nameof(Index));
-        }
+        
     }
 }

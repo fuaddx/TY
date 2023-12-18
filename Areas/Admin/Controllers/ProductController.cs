@@ -7,6 +7,7 @@ using Pustok2.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 using Pustok2.Migrations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Pustok2.ViewModel.ProductVM
 {
@@ -48,6 +49,10 @@ namespace Pustok2.ViewModel.ProductVM
             ViewBag.Categories = _db.Categories;
             ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
             return View();
+        }
+        public IActionResult Cancel()
+        {
+            return RedirectToAction(nameof(Index));
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateVM vm)
@@ -135,141 +140,14 @@ namespace Pustok2.ViewModel.ProductVM
                     ImagePath = i.SaveAsync(PathConstants.Product).Result
                 }).ToList()
             };
+
             await _db.Products.AddAsync(prod);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
 
-        /*public async Task<IActionResult> Update(int? id)
-       {
-           if (id == null) return BadRequest();
-           ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
-           ViewBag.Categories = _db.Categories;
-           var data = await _db.Products
-               .Include(p=>p.ProductImages)
-               .Include(p=>p.ProductColors)
-               .SingleOrDefaultAsync(p=>p.Id == id);
-           if(data==null) return NotFound();
-
-           var vm = new ProductUpdateVm
-           {
-               About = data.About,
-               CategoryId = data.CategoryId,
-               Quantity = data.Quantity,
-               SellPrice = data.SellPrice,
-               ProductCode = data.ProductCode,
-               ColorIds = data.ProductColors?.Select(i => i.Id),
-               Description = data.Description,
-               Name = data.Name,
-               Discount = data.Discount,
-               ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
-               {
-                   Id = pi.Id,
-                   Url = pi.ImagePath
-               }),
-               CoverImageUrl = data.ImageUrl,
-           };
-           return View(vm);
-       }
-
-       [HttpPost]
-       public async Task<IActionResult>Update(int? id,ProductUpdateVm vm)
-       {
-           if(id==null || id<=0) return BadRequest();
-
-           if (vm.MainImage != null)
-           {
-               if (!vm.MainImage.IsCorrectType())
-               {
-                   ModelState.AddModelError("MainImage", "Wrong file type");
-               }
-               if (!vm.MainImage.IsValidSize())
-               {
-                   ModelState.AddModelError("MainImage", "Files length must be less than kb");
-               }
-           }
-           if (vm.Images != null)
-           {
-               //string message = string.Empty;
-               foreach (var img in vm.Images)
-               {
-                   if (!img.IsCorrectType())
-                   {
-                       ModelState.AddModelError("", "Wrong file type (" + img.FileName + ")");
-                       //message += "Wrong file type (" + img.FileName + ") \r\n";
-                   }
-                   if (!img.IsValidSize(200))
-                   {
-                       ModelState.AddModelError("", "Files length must be less than kb (" + img.FileName + ")");
-                       //message += "Files length must be less than kb (" + img.FileName + ") \r\n";
-                   }
-               }
-           }
-           if (vm.CostPrice > vm.SellPrice)
-           {
-               ModelState.AddModelError("CostPrice", "Sell price must be bigger than cost price");
-           }
-
-           if (!vm.ColorIds.Any())
-           {
-               ModelState.AddModelError("ColorIds", "You must add at least 1 color");
-           }
-           if (!ModelState.IsValid)
-           {
-               ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
-               ViewBag.Categories = _db.Categories;
-               return View(vm);
-           }
-           var data = await _db.Products
-               .Include(p => p.ProductImages)
-               .Include(p => p.ProductColors)
-               .SingleOrDefaultAsync(p => p.Id == id);
-           if (data == null) return NotFound();
-
-           vm.About = data.About;
-           vm.CategoryId = data.CategoryId;
-           vm.Quantity = data.Quantity;
-           vm.SellPrice = data.SellPrice;
-           vm.ProductCode = data.ProductCode;
-           vm.ColorIds = data.ProductColors?.Select(i => i.ColorId);
-           vm.Description = data.Description;
-           vm.Name = data.Name;
-           vm.Discount = data.Discount;
-           vm.ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
-               {
-                   Id = pi.Id,
-                   Url = pi.ImagePath
-               });
-           vm.CoverImageUrl = data.ImageUrl;
-
-           if (vm.MainImage != null)
-           {
-               string filePath = Path.Combine(PathConstants.RootPath, data.ImageUrl);
-               if (System.IO.File.Exists(filePath))
-               {
-                   System.IO.File.Delete(filePath);
-               }
-               data.ImageUrl = await vm.MainImage.SaveAsync(PathConstants.Product);
-           }
-
-           if (vm.Images != null)
-           {
-               var imgs = vm.Images.Select(i => new ProductImages
-               {
-                   ImagePath = i.SaveAsync(PathConstants.Product).Result,
-                   ProductId = data.Id
-               });
-
-               data.ProductImages.AddRange(imgs);
-           }
-           if (!Enumerable.SequenceEqual(data.ProductColors?.Select(p=>p.ColorId),vm.ColorIds))
-           {
-               data.ProductColors = vm.ColorIds.Select(c => new ProductColor { ColorId = c, ProductId = data.Id }).ToList();
-           }
-           await _db.SaveChangesAsync();
-           return RedirectToAction(nameof(Index));
-       }*/
+        
         public async Task<IActionResult> Update(int? id)
         {
             if (id == null || id <= 0) return BadRequest();
@@ -430,7 +308,7 @@ namespace Pustok2.ViewModel.ProductVM
             return RedirectToAction(nameof(Index));
         }
 
-
+       
        
     }
 }

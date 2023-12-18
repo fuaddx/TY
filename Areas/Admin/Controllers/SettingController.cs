@@ -29,6 +29,10 @@ namespace Pustok2.Areas.Admin.Controllers
                 Logo = c.Logo,
             }).ToListAsync());
         }
+        public IActionResult Cancel()
+        {
+            return RedirectToAction(nameof(Index));
+        }
         public async Task<IActionResult> Update(int? id)
         {
             if (id == null || id <= 0) return BadRequest();

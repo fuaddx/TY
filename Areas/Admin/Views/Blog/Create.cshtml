@@ -37,7 +37,8 @@
 
 
             <button class="btn btn-success">Create</button>
-            <button class="btn btn-close" formaction="@Url.Action("Cancel", "BlogController")" style="background:red;color:white">Cancel</button>
+            <a asp-controller="Blog" asp-action="Cancel" class="btn btn-close" style="background:red;color:white">Cancel</a>
+
 
         </form>
     </div>

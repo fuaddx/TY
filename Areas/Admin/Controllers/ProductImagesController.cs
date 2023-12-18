@@ -35,6 +35,10 @@ namespace Pustok2.Areas.Admin.Controllers
             ViewBag.Product = _db.Products;
             return View();
         }
+        public IActionResult Cancel()
+        {
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Create(ProductImagesCreateVm vm)
         {

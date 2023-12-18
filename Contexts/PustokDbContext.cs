@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pustok2.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace Pustok2.Contexts
 {
-    public class PustokDbContext : DbContext
+    public class PustokDbContext : IdentityDbContext
     {
         public PustokDbContext(DbContextOptions opt) : base(opt) { }
         public DbSet<Slider> Sliders { get; set; }
@@ -18,6 +19,7 @@ namespace Pustok2.Contexts
         public DbSet<Tag> Tags { get; set; }
         public DbSet<BlogTag> BlogsTags { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             IEnumerable<EntityEntry<Blog>> entries = ChangeTracker.Entries<Blog>();
@@ -26,12 +28,17 @@ namespace Pustok2.Contexts
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                   DateTime utcTime = DateTime.UtcNow;
+                    DateTime azTime = utcTime.AddHours(4);//GMT+4
+                    entry.Entity.CreatedAt = azTime;
                     entry.Entity.UptadedAt = null; // Set to null for newly added entities
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.UptadedAt = DateTime.UtcNow;
+
+                    DateTime utcTime = DateTime.UtcNow;
+                    DateTime azTime = utcTime.AddHours(4);
+                    entry.Entity.UptadedAt = azTime;
 
                     // Check if any properties were modified
                     var modifiedProperties = entry.Properties
@@ -47,8 +54,6 @@ namespace Pustok2.Contexts
 
             return base.SaveChangesAsync(cancellationToken);
         }
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Setting>()

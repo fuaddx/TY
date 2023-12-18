@@ -63,7 +63,6 @@
                 <label asp-for="Images"></label>
                 <input asp-for="Images" accept="image/*" class="form-control">
                 <div class="text-danger" asp-validation-summary=ModelOnly></div>
-                @* <span asp-validation-for="Images" class="text-danger"></span> *@
             </div>
             <div class="form-group">
                 <label asp-for="About"></label>
@@ -90,7 +89,7 @@
                 <span asp-validation-for="ColorIds" class="text-danger"></span>
             </div>
             <button class="btn btn-success">Create</button>
-
+            <a asp-controller="Product" asp-action="Cancel" class="btn btn-close" style="background:red;color:white">Cancel</a>
         </form>
     </div>
 </div>

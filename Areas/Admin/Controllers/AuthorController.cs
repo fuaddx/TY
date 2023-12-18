@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pustok2.Contexts;
 using Pustok2.ViewModel.AuthorVM;
+using Pustok2.ViewModel.CategoryVM;
+using Pustok2.ViewModel.CommonVM;
 
 namespace Pustok2.Areas.Admin.Controllers
 {
@@ -29,6 +31,10 @@ namespace Pustok2.Areas.Admin.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+        public IActionResult Cancel()
+        {
+            return RedirectToAction(nameof(Index));
         }
         [HttpPost]
         public async Task<IActionResult> Create(AuthorCreateVm vm)
@@ -81,6 +87,7 @@ namespace Pustok2.Areas.Admin.Controllers
             var data = await _db.Author.FindAsync(id);
             if (data == null) return NotFound();
             data.Name = vm.Name;
+            data.Surname = vm.Surname;
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -90,5 +97,22 @@ namespace Pustok2.Areas.Admin.Controllers
             ViewBag.AuthorsList = new SelectList(authors, "Name", "Surname");
             return View();
         }
+
+        /*public async Task<IActionResult> AuthorPagination(int page = 1, int count = 8)
+        {
+
+            var items = _db.Author.Skip((page - 1) * count).Take(count).Select(p => new AuthorListVm
+            {
+                Id = p.Id,
+                Name = p.Name,
+               Surname = p.Surname,
+            });
+            int Totalcount = await _db.Author.CountAsync();
+            PaginatonVM<IEnumerable<AuthorListVm>> pag = new(count, page, (int)Math.Ceiling((decimal)Totalcount / count), items);
+
+            return PartialView("AuthorPaginationn", pag);
+        }*/
+
+
     }
 }

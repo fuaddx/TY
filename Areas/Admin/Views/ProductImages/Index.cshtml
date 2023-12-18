@@ -11,7 +11,6 @@
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead> 
-                    <th>Id</th>
                     <th>ImagePath</th>
                     <th>Is Active</th>
                     <th>Product</th>
@@ -23,7 +22,6 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.Id</td>
                                 <td>@item.ImagePath</td>
                                 <td>@item.IsActive</td>
                                 <td>@item.Product.Name

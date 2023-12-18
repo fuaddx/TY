@@ -29,6 +29,10 @@ namespace Pustok2.Areas.Admin.Controllers
         {
             return View();
         }
+        public IActionResult Cancel()
+        {
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Create(CreateTagVm vm)
         {
