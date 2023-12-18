@@ -36,8 +36,6 @@ namespace Pustok2.Areas.Admin.Controllers
             ViewBag.Tags = new SelectList(_db.Tags.ToList(), "Id", "Title");
             return View();
         }
-        
-
         [HttpPost]
         public async Task<IActionResult> Create(BloglistCreateVm vm)
         {
@@ -45,7 +43,7 @@ namespace Pustok2.Areas.Admin.Controllers
             {
                 ModelState.AddModelError("TagsId", "TagsId doesnt exist");
                 ViewBag.Author = _db.Author;
-                ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
+                ViewBag.Tags = new SelectList(_db.Tags.ToList(), "Id", "Title");
                 return View(vm);
             }
             Blog prod = new Blog
@@ -60,6 +58,52 @@ namespace Pustok2.Areas.Admin.Controllers
                 }).ToList()
             };
             await _db.Blogs.AddAsync(prod);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult>Update(int? id)
+        {
+            if (id == null) return BadRequest();
+            ViewBag.Author = _db.Author;
+            ViewBag.Tags = new SelectList(_db.Tags.ToList(), "Id", "Title");
+            var data = await _db.Blogs.FindAsync(id);
+            if (data == null) return NotFound();
+            return View(new BlogUpdate
+            {
+                Title = data.Title,
+                Description = data.Description,
+                AuthorId = data.AuthorId
+            });
+        }
+       
+
+        [HttpPost]
+        public async Task<IActionResult>Update(int? id,BlogUpdate vm)
+        {
+            if (id == null || id <= 0) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Author = _db.Author;
+                ViewBag.Tags = new SelectList(_db.Tags.ToList(), "Id", "Title");
+                return View(vm);
+            }
+            var data = await _db.Blogs
+                .Include(p => p.BlogTag)
+                .SingleOrDefaultAsync(p => p.Id == id);
+            data.Title = vm.Title;
+            data.Description = vm.Description;
+            data.Author = vm.Author;
+            data.AuthorId = vm.AuthorId;
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        
+        public async Task<IActionResult>Delete(int? id)
+        {
+            if (id == null) return BadRequest();
+            var data = await _db.Blogs.FindAsync(id);
+            if (data == null) return NotFound();
+            _db.Blogs.Remove(data);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

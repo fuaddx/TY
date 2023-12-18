@@ -29,7 +29,9 @@
                     </a>
                 </h3>
                      <p class="price"><span class="qty">@item.Count ×</span> £@item.SellPrice</p>
-                <button class="cross-btn"><i class="fas fa-times"></i></button>
+                <button class="cross-btn">
+                  <a asp-action="RemoveBasket" asp-controller="Product" asp-route-id="@item.Id"><i class="fas fa-times"></i></a>
+                  </button>
             </div>
         </div>
         }

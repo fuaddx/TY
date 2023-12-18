@@ -287,6 +287,7 @@ namespace Pustok2.ViewModel.ProductVM
 
             var vm = new ProductUpdateVm
             {
+                
                 About = data.About,
                 CategoryId = data.CategoryId,
                 ColorIds = data.ProductColors?.Select(i => i.ColorId),
@@ -311,6 +312,7 @@ namespace Pustok2.ViewModel.ProductVM
         public async Task<IActionResult> Update(int? id, ProductUpdateVm vm)
         {
             if (id == null || id <= 0) return BadRequest();
+
             if (vm. MainImage != null)
             {
                 if (!vm.MainImage.IsCorrectType())
@@ -359,25 +361,14 @@ namespace Pustok2.ViewModel.ProductVM
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductColors)
                 .SingleOrDefaultAsync(p => p.Id == id);
-
-            if (data == null) return NotFound();
-
-            vm.Name = data.Name;
-            vm.About = data.About;
-            vm.CategoryId = data.CategoryId;
-            vm.Quantity = data.Quantity;
-            vm.SellPrice = data.SellPrice;
-            vm.ProductCode = data.ProductCode;
-            vm.ColorIds = data.ProductColors?.Select(i => i.ColorId);
-            vm.Description = data.Description;
-            vm.Name = data.Name;
-            vm.Discount = data.Discount;
-            vm.ImageUrls = data.ProductImages?.Select(pi => new ProductImgVm
-            {
-                Id = pi.Id,
-                Url = pi.ImagePath
-            });
+            data.Name = vm.Name;
+            data.About = vm.About ;
+            data.CategoryId = vm.CategoryId;
+            data.Quantity = vm.Quantity;
+            data.SellPrice = data.SellPrice;
+            data.ProductCode = vm.ProductCode;
             vm.CoverImageUrl = data.ImageUrl;
+            if (data == null) return NotFound();
 
             if (vm.MainImage != null)
             {

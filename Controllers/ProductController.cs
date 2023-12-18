@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.Versioning;
 using Pustok2.Contexts;
 using Pustok2.ViewModel.BasketVM;
 using Pustok2.ViewModel.ProductVM;
@@ -58,6 +59,28 @@ namespace Pustok2.Controllers
                 existItem.Count++;
             }
             HttpContext.Response.Cookies.Append("basket", JsonConvert.SerializeObject(basket));
+            return Ok();
+        }
+
+        public async Task<IActionResult>RemoveBasket(int? id)
+        {
+            if (id == null || id <= 0) return BadRequest();
+            if (!await _db.Products.AnyAsync(p => p.Id == id)) return NotFound();
+            var dasket = JsonConvert.DeserializeObject<List<BasketProductAndCountVM>>(HttpContext.Request.Cookies["basket"] ?? "[]");
+            var existItem = dasket.Find(b => b.Id == id);
+            if (existItem == null)
+            {
+                dasket.Remove(new BasketProductAndCountVM()
+                {
+                    Id = (int)id,
+                    Count = 1
+                });
+            }
+            else
+            {
+                existItem.Count--;
+            }
+            HttpContext.Response.Cookies.Append("basket", JsonConvert.SerializeObject(dasket));
             return Ok();
         }
     }

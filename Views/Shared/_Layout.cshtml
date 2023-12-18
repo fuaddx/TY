@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/assets/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Pustok2/assets.styles.css" asp-append-version="true" />
-    
     @await RenderSectionAsync("styles", false)
 </head>
 <!--Products Details -->
@@ -28,6 +27,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="~/assets/css/plugins.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="~/assets/css/main.css" />
     <link rel="shortcut icon" type="image/x-icon" href="~/assets/image/favicon.ico">
+    
 </head>
 <body>
 
@@ -982,6 +982,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("scripts", false)
 </body>
 </html>

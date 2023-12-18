@@ -14,7 +14,33 @@
             fetch($(this).attr("href"))
                 .then(res => {
                     if (res.ok) {
+                        Command: toastr["success"]("Product added")
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "500",
+                            "timeOut": "1000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                    }
+                })
+        });
 
+        $("body").on("click", ".cross-btn", function (ev) {
+            ev.preventDefault();
+            fetch($(this).attr("href"))
+                .then(res => {
+                    if (res.ok) {
                         Command: toastr["success"]("Product added")
                         toastr.options = {
                             "closeButton": false,
