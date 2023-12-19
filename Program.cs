@@ -14,27 +14,27 @@ internal class Program
         builder.Services.AddControllersWithViews();
 
 
-        builder.Services.AddDbContext<PustokDbContext>(option =>
-        {
-            option.UseSqlServer(builder.Configuration.GetConnectionString("MSSql"));
-            //or option.UseSqlServer(builder.Configuration[GetConnectionString:"MSSql"]);
-        }).AddIdentity<AppUser, IdentityRole>(opt =>
-        {
-            //1
-            opt.SignIn.RequireConfirmedEmail = true; 
-            //2
-            opt.User.RequireUniqueEmail = true;
-            //3
-            opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789._";
-            opt.Lockout.MaxFailedAccessAttempts = 5;
-            opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-            opt.Password.RequireNonAlphanumeric= false;
-            opt.Password.RequiredLength = 4;    
-        }).AddDefaultTokenProviders().AddEntityFrameworkStores<PustokDbContext>();
+		builder.Services.AddDbContext<PustokDbContext>(options =>
+		{
+			options.UseSqlServer(builder.Configuration["ConnectionStrings:MSSql"]);
+		}).AddIdentity<AppUser, IdentityRole>(opt =>
+		{
+			opt.SignIn.RequireConfirmedEmail = false;
+			opt.User.RequireUniqueEmail = true;
+			opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789._";
+			opt.Lockout.MaxFailedAccessAttempts = 5;
+			opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+			opt.Password.RequireNonAlphanumeric = false;
+			opt.Password.RequiredLength = 4;
+		}).AddDefaultTokenProviders().AddEntityFrameworkStores<PustokDbContext>();
 
+		builder.Services.ConfigureApplicationCookie(options =>
+		{
+			options.LoginPath = new PathString("/Auth/Login");
+			options.LogoutPath = new PathString("/Auth/Logout");
+		});
 
-
-        builder.Services.AddSession();
+		builder.Services.AddSession();
         // ne vaxt Pustok istesem konstruktorda New la ver mene 
 
         builder.Services.AddScoped<LayoutService>();
@@ -54,9 +54,12 @@ internal class Program
 
         app.UseRouting();
 
-        app.UseAuthorization();
 
-        app.MapControllerRoute(
+
+		app.UseAuthentication();
+		app.UseAuthorization();
+
+		app.MapControllerRoute(
             name: "Areas",
             pattern: "{area:exists}/{controller=Slider}/{action=Index}/{id?}"
         );

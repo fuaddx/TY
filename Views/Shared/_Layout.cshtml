@@ -29,6 +29,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="~/assets/image/favicon.ico">
     
 </head>
+
+
+
 <body>
 
     <div class="site-wrapper" id="top">
@@ -339,8 +342,23 @@
                             <div class="main-navigation flex-lg-right">
                                 <div class="cart-widget">
                                     <div class="login-block">
-                                        <a href="login-register.html" class="font-weight-bold">Login</a> <br>
-                                        <span>or</span><a href="login-register.html">Register</a>
+
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a>@User.Identity.Name</a>
+                                            <ul class="user-dropdown">
+                                                <li class="user">
+                                                    <ul>
+                                                        <li><a asp-action="Logout" asp-controller="Auth">Logout</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                           <a asp-action="Login" asp-controller="Auth" class="font-weight-bold">Login</a> <br>
+                                           <span>or</span><a asp-action="Register" asp-controller="Auth">Register</a>
+                                        }
                                     </div>
                                     
                                         <div id="basket">
